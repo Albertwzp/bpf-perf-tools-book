@@ -13,3 +13,12 @@ funcgraph-perf -m 1 -a -d 6 estimation_timer
 ```
 bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
 ```
+## disassmble
+```
+llvm-objdump -S hello.bpf.o
+```
+## strace bpf syscall
+```
+strace -e bpf ./hello.py
+strace -e bpf,perf_event_open,ioctl,ppoll ./hello-buffer-config.py
+```

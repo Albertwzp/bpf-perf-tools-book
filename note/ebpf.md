@@ -15,10 +15,17 @@ opensnoop -x
 
 # 技术背景
 ```
-bpftool prog show
+bpftool prog load <hello.bpf.o> </sys/fs/bpf/hello>
+bpftool net attach xdp id <ID> dev <eth0>
+ip link set dev eth0 xdp obj hello.bpf.o sec xdp
+ip link set dev eth0 xdp off
+
+bpftool prog show [id|name|tag|pinned] <P>
 bpftool prog dump xlated id <ID> [opcode|visual|linum]
 bpftool prog dump jited id <ID> 
-bpftool btf dump id <ID> 
+bpftool map list
+bpftool map dump [name|id] <P>
+bpftool btf dump [name|id] <P> 
 ```
 
 # 性能分析
@@ -37,6 +44,11 @@ BCC 检查：execsnoop, opensnoop, ext4slower, biolatency -m, biosnoop, cachesta
 # BCC
 bcc-tools bcc
 ```
+# Debian install bcc
+echo deb http://cloudfront.debian.net/debian sid main >> /etc/apt/sources.list
+sudo apt-get install -y bpfcc-tools libbpfcc libbpfcc-dev linux-headers-$(uname -r)
+[bpf]<https://github.com/iovisor/bcc/blob/master/INSTALL.md>
+
 funccount [tcp_drop|'vfs_*'|-i 1 c:pthread_mutex_lock|'t:syscalls:sys_enter_*']
 
 stackcount -f -P -D 10 ktime_get >out.txt
@@ -96,6 +108,7 @@ git clone https://github.com/brendangregg/FlameGraph.git
 bpftrace -e 'profile:hz:49 /pid/ { @samples[ustack, kstack, comm] = count(); }'
 ```
 
+# 
 # Mem
 传统工具
 ```
