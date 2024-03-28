@@ -15,17 +15,33 @@ opensnoop -x
 
 # 技术背景
 ```
-bpftool prog load <hello.bpf.o> </sys/fs/bpf/hello>
+bpftool prog load <hello.bpf.o> </sys/fs/bpf/hello> [map name <X> <Y>
 bpftool net attach xdp id <ID> dev <eth0>
 ip link set dev eth0 xdp obj hello.bpf.o sec xdp
 ip link set dev eth0 xdp off
 
-bpftool prog show [id|name|tag|pinned] <P>
-bpftool prog dump xlated id <ID> [opcode|visual|linum]
+bpftool prog show [id|name|tag|pinned] <P> --json |jq
+bpftool prog dump xlated id <ID> [opcode|visual|linum] &>output.out
+dot -Tpng output.out -o visual-graph.png
 bpftool prog dump jited id <ID> 
-bpftool map list
+bpftool map [list|create|update]
 bpftool map dump [name|id] <P>
 bpftool btf dump [name|id] <P> 
+
+bpftool net show
+bpftool cgroup [tree|show cgroup_path]
+bpftool batch file <FILE>
+```
+
+# Program Type
+```
+BPF_PROG_TYPE_SOCKET_FILTER
+BPF_PROG_TYPE_KPEOBE
+BPF_PROG_TYPE_TRACEPOINT
+BPF_PROG_TYPE_XDP
+BPF_PROG_TYPE_PERF_EVENT
+BPF_PROG_TYPE_CGROUP_SKB
+BPF_PROG_TYPE_CGROUP_SOCK
 ```
 
 # 性能分析

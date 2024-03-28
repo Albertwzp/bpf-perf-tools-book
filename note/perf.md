@@ -59,3 +59,8 @@ perf trace -e block:block_rq_issue,block:block_rq_complete
 perf trace -e syscalls:*enter_mmap --filter='flags==SHARED'
 perf trace -e block:block_rq_issue,block:block_rq_complete --no-syscalls
 ```
+
+# Ftrace
+```
+perf ftrace -[T|G] -a sleep 10 
+```

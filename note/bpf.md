@@ -1,6 +1,9 @@
 ## 内核态线程使用[xxx]标识
 ## load avg
 ```
+make VMLINUX_BTF=/sys/kernel/btf/vmlinux -M samples/bpf
+```
+```
 grep -c 'model name' /proc/cpuinfo		#核心数
 ```
 ## net
@@ -21,4 +24,8 @@ llvm-objdump -S hello.bpf.o
 ```
 strace -e bpf ./hello.py
 strace -e bpf,perf_event_open,ioctl,ppoll ./hello-buffer-config.py
+```
+## kubectl-trace
+```
+kubectl-trace -n <NS> run pod/<POD> -e 'uretprobe:/proc/$container_pid/exe:main { printf("exit: %d\n", retval) }'
 ```
